@@ -59,8 +59,6 @@ export async function reportUploadMessageAPI(req, res) {
     fileName
   );
 
-  logger(messageChain);
-
   try {
     await sendMessageToAllTarget(messageChain);
 

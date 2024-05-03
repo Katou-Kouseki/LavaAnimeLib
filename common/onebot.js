@@ -8,10 +8,12 @@ const oneBotAPI = axios.create({
 });
 
 export async function sendMessageToAllTarget(cqCode) {
-  console.log(`${cqCode}\n[OneBot Handler] 批量发送以上消息到所有接收群...`);
+  logger(`${cqCode}\n[OneBot Handler] 批量发送以上消息到所有接收群...`);
   for (const groupId of config.oneBot.target.group) {
     const result = await sendGroupMessage(groupId, cqCode);
-    console.log(`[OneBot Handler] 发送 ${groupId} 的结果: \n${result}`);
+    logger(
+      `[OneBot Handler] 发送 ${groupId} 的结果: \n${JSON.stringify(result)}`
+    );
     await doRandomDelay();
   }
 }
