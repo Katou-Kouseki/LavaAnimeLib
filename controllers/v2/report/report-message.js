@@ -2,10 +2,10 @@ import { prisma } from "../../../prisma/client.js";
 import path from "path";
 import wrongQuery from "../response/4xx/wrongQuery.js";
 import success from "../response/2xx/success.js";
-import { sendMiraiMessageToAll } from "../../../common/miraiAPI.js";
 import parseFileName from "anime-file-parser";
 import config from "../../../common/config.js";
 import { logger } from "../../../common/tools/logger.js";
+import { sendMessageToAllTarget } from "../../../common/onebot.js";
 
 export async function reportUploadMessageAPI(req, res) {
   let { index, fileName } = req.body;
@@ -62,7 +62,7 @@ export async function reportUploadMessageAPI(req, res) {
   logger(messageChain);
 
   try {
-    await sendMiraiMessageToAll(messageChain);
+    await sendMessageToAllTarget(messageChain);
 
     await prisma.upload_message.update({
       data: {
@@ -129,32 +129,48 @@ async function buildSuccessMessageChain(
   let index = anime ? `${anime.year}${anime.type} ` : "";
   let title = anime?.title ?? trueIndex.slice(-1)[0];
 
-  // 不带图片的消息链
+  // // 不带图片的消息链
+  // let messageChain = [
+  //   {
+  //     type: "Plain",
+  //     text: `${index}${title} | 🎬 ${animeEpisode}\n`,
+  //   },
+  //   {
+  //     type: "Plain",
+  //     text: `📁 文件名称 ————\n${animeInfo}\n\n`,
+  //   },
+  //   {
+  //     type: "Plain",
+  //     text: `🎉 已更新完成`,
+  //   },
+  // ];
+
+  // // 如果成功获取到图片，则追加图片
+  // if (posterUrl) {
+  //   messageChain = [
+  //     {
+  //       type: "Image",
+  //       url: posterUrl,
+  //     },
+  //     ...messageChain,
+  //   ];
+  // }
+
   let messageChain = [
-    {
-      type: "Plain",
-      text: `${index}${title} | 🎬 ${animeEpisode}\n`,
-    },
-    {
-      type: "Plain",
-      text: `📁 文件名称 ————\n${animeInfo}\n\n`,
-    },
-    {
-      type: "Plain",
-      text: `🎉 已更新完成`,
-    },
+    `${index}${title} | 🎬 ${animeEpisode}`,
+    `📁 文件名称 ————`,
+    `${animeInfo}`,
+    ``,
+    `🎉 已更新完成`,
   ];
 
   // 如果成功获取到图片，则追加图片
   if (posterUrl) {
     messageChain = [
-      {
-        type: "Image",
-        url: posterUrl,
-      },
+      `[CQ:image,file=${encodeURIComponent(posterUrl)}]`,
       ...messageChain,
     ];
   }
 
-  return messageChain;
+  return messageChain.join("\n");
 }

@@ -52,6 +52,19 @@ export default {
       },
     },
   },
+  // OneBot 设置
+  // 用于发送 QQ 消息提示 (新番入库)
+  oneBot: {
+    target: {
+      group: [123456789],
+    },
+    accessToken: "ThisIsYourOneBotAccessToken",
+    adapterSettings: {
+      http: {
+        baseURL: "https://onebot-api.com",
+      },
+    },
+  },
   // 缓存天数，管理 Bangumi Data 数据会被缓存多少天后刷新
   cache: 3,
   security: {

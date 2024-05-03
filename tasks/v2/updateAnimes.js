@@ -2,9 +2,11 @@ import _ from "lodash";
 import { promiseDB } from "../../common/sql.js";
 import { logger } from "../../common/tools/logger.js";
 import { getDefaultDrive, getDrive } from "../../controllers/v2/drive/main.js";
-import { sendMiraiMessageToAll } from "../../common/miraiAPI.js";
 import alistGetter from "./tools/alistGetter.js";
 import { repairBangumiDataID } from "./updateBangumiData.js";
+import {
+  sendMessageToAllTarget
+} from "../../common/onebot.js";
 
 export default async function updateAnimes() {
   // 用于存储本次入库和删除的的番剧列表
@@ -74,7 +76,7 @@ export default async function updateAnimes() {
 
   if (allNewAnimes.length) {
     let message = createMessage(allNewAnimes);
-    let result = sendMiraiMessageToAll(message);
+    let result = sendMessageToAllTarget(message);
     logger("[番剧更新] 发送了 QQ 群消息.");
     logger(message);
     logger("结果:", result);
@@ -190,8 +192,18 @@ async function changeDelete(year, type, name, deleted) {
   );
 }
 
+// 传入新入库番剧列表，返回消息
 function createMessage(allNewAnimes) {
-  // 传入新入库番剧列表，返回消息
+  return `【发现新作品收录 / 计划】(自动发送)
+——————
+${allNewAnimes
+  .map((anime) => {
+    return `${anime.year}${anime.type} - ${anime.name}`;
+  })
+  .join("\n")}
+——————
+新收录 / 计划以上 ${allNewAnimes.length} 部作品`;
+
   let message = [
     {
       type: "Plain",
