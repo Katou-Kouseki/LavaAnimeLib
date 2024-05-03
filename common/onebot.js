@@ -12,7 +12,9 @@ export async function sendMessageToAllTarget(cqCode) {
   for (const groupId of config.oneBot.target.group) {
     const result = await sendGroupMessage(groupId, cqCode);
     logger(
-      `[OneBot Handler] 发送 ${groupId} 的结果: \n${JSON.stringify(result)}`
+      `[OneBot Handler] 发送 ${groupId} 的结果: \n${JSON.stringify(
+        result.data
+      )}`
     );
     await doRandomDelay();
   }
