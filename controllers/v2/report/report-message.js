@@ -164,10 +164,7 @@ async function buildSuccessMessageChain(
 
   // 如果成功获取到图片，则追加图片
   if (posterUrl) {
-    messageChain = [
-      `[CQ:image,file=${encodeURIComponent(posterUrl)}]`,
-      ...messageChain,
-    ];
+    messageChain = [`[CQ:image,file=${posterUrl}]`, ...messageChain];
   }
 
   return messageChain.join("\n");
