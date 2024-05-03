@@ -1,5 +1,6 @@
 import axios from "axios";
 import config from "./config.js";
+import { logger } from "./tools/logger.js";
 
 const oneBotAPI = axios.create({
   baseURL: config.oneBot.adapterSettings.http.baseURL,
@@ -9,7 +10,8 @@ const oneBotAPI = axios.create({
 export async function sendMessageToAllTarget(cqCode) {
   console.log(`${cqCode}\n[OneBot Handler] 批量发送以上消息到所有接收群...`);
   for (const groupId of config.oneBot.target.group) {
-    await sendGroupMessage(groupId, cqCode);
+    const result = await sendGroupMessage(groupId, cqCode);
+    console.log(`[OneBot Handler] 发送 ${groupId} 的结果: \n${result}`);
     await doRandomDelay();
   }
 }
