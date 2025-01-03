@@ -7,15 +7,13 @@ const oneBotAPI = axios.create({
   timeout: 10000,
 });
 
-export async function sendMessageToAllTarget(cqCode) {
-  logger(`${cqCode}\n[OneBot Handler] 批量发送以上消息到所有接收群...`);
+export async function sendMessageToAllTarget(cqCode, reTry) {
+  logger(cqCode);
+  logger(`[OneBot Handler] 批量发送以上消息到所有接收群...`);
+
   for (const groupId of config.oneBot.target.group) {
-    const result = await sendGroupMessage(groupId, cqCode);
-    logger(
-      `[OneBot Handler] 发送 ${groupId} 的结果: \n${JSON.stringify(
-        result.data
-      )}`
-    );
+    await sendGroupMessage(groupId, cqCode, reTry);
+    logger(`[OneBot Handler] 发送 ${groupId} 完成.`);
     await doRandomDelay();
   }
 }
@@ -30,11 +28,11 @@ export async function sendGroupMessage(groupId, cqCode, reTry = 3) {
       },
     });
   } catch (error) {
-    console.error(
-      error,
-      `\n[OneBot Handler] 发送消息失败! 剩余重试次数: ${reTry}`
-    );
-    if (reTry === 0) return;
+    if (reTry === 0) throw error;
+    
+    console.error(error);
+    console.error(`[OneBot Handler] 发送消息失败! 剩余重试次数: ${reTry}`);
+
     await doRandomDelay();
     return await sendGroupMessage(groupId, cqCode, reTry - 1);
   }
@@ -43,7 +41,7 @@ export async function sendGroupMessage(groupId, cqCode, reTry = 3) {
 async function doRandomDelay() {
   let randomDelay = 10000 * Math.random();
   await delay(randomDelay);
-  logger(`[OneBot Handler] 完成 ${randomDelay}ms 随机延迟`);
+  // logger(`[OneBot Handler] 完成 ${randomDelay}ms 随机延迟`);
 }
 
 /**

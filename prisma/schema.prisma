@@ -101,6 +101,7 @@ model upload_message {
   bangumiData       bangumi_data? @relation(fields: [bangumiID], references: [bgmid])
   fileName          String?       @db.Text
   messageSentStatus Boolean       @default(false)
+  messageSkiped     Boolean       @default(false) // 20250103 新增：若某番剧的某集数已经发送过通知，则不会再发送此集的通知；若此项为 true，messageSentStatus 仍会为 true.
   uploadTime        DateTime?     @default(now())
 }
 
