@@ -5,13 +5,14 @@ import success from "../../response/2xx/success.js";
 import wrongQuery from "../../response/4xx/wrongQuery.js";
 
 export async function getRecentUpdatesAPI(req, res) {
-  let { skip = 0, take = 20 } = req.query;
+  let { skip = 0, take = 20, messageSkiped = false } = req.query;
 
   try {
     skip = Number.parseInt(skip);
     take = Number.parseInt(take);
+    messageSkiped = JSON.parse(messageSkiped);
 
-    if (skip < 0 || take < 0) throw "";
+    if (skip < 0 || take < 0 || typeof messageSkiped !== "boolean") throw "";
   } catch (error) {
     return wrongQuery(res);
   }
@@ -19,6 +20,7 @@ export async function getRecentUpdatesAPI(req, res) {
   let recentUpdates = await prisma.upload_message.findMany({
     skip,
     take,
+    where: { messageSkiped },
     include: { anime: true },
     orderBy: { uploadTime: "desc" },
   });

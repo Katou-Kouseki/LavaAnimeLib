@@ -26,7 +26,8 @@
     "dayjs": "^1.11.6",
     "express": "^4.17.3",
     "lodash": "^4.17.21",
-    "mysql2": "^3.9.4"
+    "mysql2": "^3.9.4",
+    "node-cron": "^3.0.3"
   },
   "prettier": {
     "singleQuote": false
