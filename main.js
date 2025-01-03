@@ -39,7 +39,7 @@ const server = app.listen(8090, () => {
   );
 });
 
-// 新番更新群消息定时任务, 每分钟执行一次
-cron.schedule("* * * * *", () => {
+// 新番更新群消息定时任务, 每三分钟执行一次
+cron.schedule("*/3 * * * *", () => {
   processPendingUploadMessage();
 });
