@@ -25,7 +25,7 @@ export async function processPendingUploadMessage() {
   let messageChain = await buildSuccessMessageChain(pendingUploadMessages);
 
   try {
-    await sendMessageToAllTarget(messageChain);
+    await sendMessageToAllTarget(messageChain, 0);
   } catch (error) {
     console.error("群消息发送失败，");
     return;
