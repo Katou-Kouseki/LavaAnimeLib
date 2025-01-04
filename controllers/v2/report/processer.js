@@ -219,6 +219,7 @@ async function buildSuccessMessageChain(pedingMessages) {
     const animeEpisode = (() => {
       const episode = parseFileName(pedingMessage.fileName).episode;
       if (episode) return `🎬 第 ${episode} 话`;
+      else return "🎬 未知集数";
     })();
 
     const anime = pedingMessage.animeID
@@ -266,7 +267,7 @@ async function buildSuccessMessageChain(pedingMessages) {
     const title = anime?.title ?? maybeIndex?.name ?? "";
 
     let tempMessageChain = [
-      [indexDisplay, title, animeEpisode].join(" | "),
+      [indexDisplay, title, animeEpisode].filter((i) => i).join(" | "),
       `📁 文件名称 ————`,
       `${animeInfo}`,
     ];
