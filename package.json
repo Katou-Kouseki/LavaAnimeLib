@@ -18,15 +18,15 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^5.4.2",
-    "aniep": "^0.4.1",
+    "aniep": "^0.6.0",
     "anime-file-parser": "^1.0.9",
-    "axios": "^0.26.0",
+    "axios": "^1.13.2",
     "chalk": "^5.1.2",
     "cookie-parser": "^1.4.6",
-    "dayjs": "^1.11.6",
+    "dayjs": "^1.11.19",
     "express": "^4.17.3",
     "lodash": "^4.17.21",
-    "mysql2": "^3.9.4",
+    "mysql2": "^3.16.0",
     "node-cron": "^3.0.3"
   },
   "prettier": {
